@@ -1,0 +1,25 @@
+{
+  "name": "mongodb",
+  "version": "1.0.0",
+  "description": "Welcome to the MongoDB Practice Repository! This repository contains various exercises and examples to help you practice and improve your MongoDB skills.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Harshisonline/MongoDb.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Harshisonline/MongoDb/issues"
+  },
+  "homepage": "https://github.com/Harshisonline/MongoDb#readme",
+  "dependencies": {
+    "express": "^4.21.2",
+    "mongoose": "^8.9.4"
+  }
+}
