@@ -3,6 +3,8 @@ import { UserModel, TodoModel } from './db.js';
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import bodyParser from 'body-parser';
+import bycrpt from 'bcrypt';
+import {z} from 'zod';
 
 const JWT_SECRET='hello this is harsh';
 
@@ -42,18 +44,34 @@ app.get('/', (req, res) => {
 });
 
 app.post('/signup', async (req, res) => {
-    const { username, password, email } = req.body;
-    console.log(req)
+    const reqbodySignup = z.object({
+        username:z.string(),
+        password:z.string(),
+        email:z.string().email()
+    })
 
+    const parsedBody = reqbodySignup.safeParse(req.body);
+
+    if(!parsedBody.success){
+        console.log(parsedBody.error.issues)
+        res.json({
+            message:parsedBody.error.issues[0].message
+        })
+        return
+    }
+
+    const { username, password, email } = req.body;
     try {
+        const hashedPass=await bycrpt.hash(password,5);
+
         await UserModel.create({
             email: email,
-            password: password,
+            password: hashedPass,
             name: username
         });
 
         res.json({
-            message: "you are logged in"
+            message: "you are Signed up"
         });
     } catch (err) {
         console.error('Error creating user:', err.message);
@@ -65,11 +83,12 @@ app.post('/signup', async (req, res) => {
 app.post('/signin',async (req,res)=>{
     const { username, password} = req.body;
 
-    const user=await UserModel.findOne({name:username,password:password});
-    console.log(user);
+    const Non_user=await UserModel.findOne({name:username});
 
-    if(user){
-        const token=jwt.sign({id:user._id},JWT_SECRET);
+    const verfied = await bycrpt.compare(password,Non_user.password);
+
+    if(verfied){
+        const token=jwt.sign({id:Non_user._id},JWT_SECRET);
         res.json({
             messagae:'Sign in successfull',
             token:token

@@ -1,4 +1,51 @@
 # MongoDB Practice Repository
+## Using Zod for Schema Validation
+
+Zod is a TypeScript-first schema declaration and validation library. It allows you to define schemas for your data and validate them easily. This can be particularly useful when working with MongoDB to ensure that the data being stored in your database adheres to a specific structure.
+
+### Installation
+
+To install Zod, you can use npm or yarn:
+
+```bash
+npm install zod
+# or
+yarn add zod
+```
+
+### Example Usage
+
+Here is an example of how to use Zod to define and validate a schema:
+
+```typescript
+import { z } from 'zod';
+
+// Define a schema for a user
+const userSchema = z.object({
+    name: z.string(),
+    email: z.string().email(),
+    age: z.number().int().positive(),
+});
+
+// Example data
+const userData = {
+    name: "John Doe",
+    email: "john.doe@example.com",
+    age: 30,
+};
+
+// Validate the data
+try {
+    userSchema.parse(userData);
+    console.log("Validation successful!");
+} catch (e) {
+    console.error("Validation failed:", e.errors);
+}
+```
+
+In this example, we define a schema for a user object with `name`, `email`, and `age` fields. We then validate an example user data object against this schema. If the data is valid, a success message is logged; otherwise, the validation errors are logged.
+
+Using Zod can help you catch errors early and ensure that your data is always in the expected format.
 
 Welcome to the MongoDB Practice Repository! This repository contains various exercises and examples to help you practice and improve your MongoDB skills.
 
